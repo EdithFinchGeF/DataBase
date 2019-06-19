@@ -178,7 +178,7 @@
             })
         }
 
-        $('.glyphicon-trash').bind("click",function (e) {
+        $('#main').bind("click",'.glyphicon-trash',function (e) {
             deleteSno = $($(this).parents("tr").children()[0]).text()
             deleteCname = $(this).parents("td").prev().prev().text()
 
@@ -205,7 +205,7 @@
             });
         })
 
-        $('.glyphicon-pencil').bind("click",function (e) {
+        $('#main').on("click",'.glyphicon-pencil',function (e) {
             var children = $(this).parents().filter("tr").children()
             var form = $('#student_update_form').find(".form-control")
             for (var i = 0; i < children.length - 1; i++) {

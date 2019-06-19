@@ -1,6 +1,6 @@
 <div class="form-row" id="search_form">
     <div class="form-group col-md-2">
-        <input type="text" id="sno"  class="form-control" placeholder="课程号">
+        <input type="text" id="cno"  class="form-control" placeholder="课程号">
     </div>
     <div class="form-group col-md-3">
         <input type="text" id="cname" class="form-control" placeholder="课程名">
@@ -31,10 +31,10 @@
             {% endfor %}
             <td>
                 <div class="form-row" style="color: rgb(232, 127, 104);">
-                    <div class="form-group col-md-3" data-toggle="tooltip" data-placement="right" title="修改">
+                    <div class="form-group col-md-4" data-toggle="tooltip" data-placement="right" title="修改">
                         <i class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#updateModal"></i>
                     </div>
-                    <div class="form-group col-md-3" data-toggle="tooltip" data-placement="right" title="删除">
+                    <div class="form-group col-md-4" data-toggle="tooltip" data-placement="right" title="删除">
                         <i title="删除" class="glyphicon glyphicon-trash" data-toggle="modal"
                             data-target="#deleteModal"></i>
                     </div>
@@ -81,18 +81,18 @@
                 <form class="form-group" id="student_update_form" action="">
                     <div class="row">
                         <div class="col-md-5 mb-3">
-                            <label for="updateSno">课程号</label>
-                            <input type="text" class="form-control" name="sno" id="updateSno">
+                            <label for="updateCno">课程号</label>
+                            <input type="text" class="form-control" name="cno" id="updateCno">
                         </div>
                         <div class="col-md-5 mb-3">
-                            <label for="updateSname">课程名</label>
-                            <input type="text" class="form-control" name="sname" id="updateSname">
+                            <label for="updateCname">课程名</label>
+                            <input type="text" class="form-control" name="cname" id="updateCname">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-5 mb-3">
                             <label for="updateCname">授课老师</label>
-                            <input type="text" class="form-control" name="teacher" id="updateCname">
+                            <input type="text" class="form-control" name="teacher" id="updateTeacher">
                         </div>
                     </div>
 
@@ -158,6 +158,7 @@
             }
         }
     })
+    
     $(document).ready(function () {
 
         function showBoast(message, type) {
@@ -169,12 +170,12 @@
             })
         }
 
-        $('.glyphicon-trash').bind("click",function (e) {
+        $('#main').on("click",".glyphicon-trash",function (e) {
             var children =  $(this).parents("tr").children()
             deleteCno = $(children[0]).text()
         });
 
-        $('#deleteButton').bind("click", function () {
+        $('#deleteButton').on("click", function () {
             data = {
                 "cno": deleteCno
             }
@@ -193,7 +194,7 @@
             });
         })
 
-        $('.glyphicon-pencil').bind("click",function (e) {
+        $('#main').on("click",'.glyphicon-pencil',function (e) {
             var children = $(this).parents().filter("tr").children()
             var form = $('#student_update_form').find(".form-control")
             for (var i = 0; i < children.length - 1; i++) {
@@ -201,14 +202,14 @@
             }
         });
 
-        $("#updateButton").bind("click",function () {
+        $("#updateButton").on("click",function () {
             var form = $('#student_update_form').find(".form-control");
             data = {}
             $(form).each(function (element) {
                 data[$(this).attr("name")] = $(this).val()
             });
-            if (data["sno"].length <= 0) {
-                showBoast("学号不能为空", "danger")
+            if (data["cno"].length <= 0) {
+                showBoast("课程号不能为空", "danger")
                 return
             }
 
@@ -228,7 +229,7 @@
             });
         })
 
-        $("#addButton").bind("click",function () {
+        $("#addButton").on("click",function () {
             var form = $('#student_add_form').find(".form-control")
             var data = {}
             $(form).each(function (element) {
@@ -254,7 +255,7 @@
             });
         })
 
-        $('#manage_course_search').bind("click",function () { 
+        $('#manage_course_search').on("click",function () { 
             var data = {}
             var form = $('#search_form').find(".form-control")
             $(form).each(function () {

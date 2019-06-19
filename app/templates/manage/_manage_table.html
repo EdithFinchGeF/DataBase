@@ -1,8 +1,8 @@
 {% if table %}
 {% for row in table %}
-<tr id="{{row[0]}}">
+<tr>
     {% for td in row %}
-    <td data-edit="true">{{td or ""}}</td>
+    <td>{{td or "" }}</td>
     {% endfor %}
     <td>
         <div class="form-row" style="color: rgb(232, 127, 104);">

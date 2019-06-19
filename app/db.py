@@ -154,7 +154,6 @@ def check_passwd(id,passwd_raw):
         return False ## 用户id错误
     passwd_hashed,name = res ##注意fetchone返回值为list
     session["username"] = name
-    print(session)
     return check_password_hash(passwd_hashed,passwd_raw)
 
 raw_set_passwd = '''
@@ -187,7 +186,8 @@ def execute_sql(SQL,*args) -> None:
     res = True
     try:
         cur.execute(SQL,args)
-    except:
+    except Exception as e:
+        print(e)
         res = False
     finally:
         db.commit()
@@ -221,15 +221,6 @@ def update_grade(sno,cname,score):
     score = int(score)
     return execute_sql(update_grade_sql,score,sno,cname)
 
-def search_from_course(cno):
-    search_course_sql = """
-        select *
-        from course
-        where cname = ?
-    """
-    table = search(search_course_sql,cno)
-    pages = math.ceil(len(table) / PAGESIZE)
-    return table,pages
 
 def add_grade(sno,cname,score):
     add_grade_sql="""
@@ -242,3 +233,108 @@ def add_grade(sno,cname,score):
         ),?)
     """
     return execute_sql(add_grade_sql,sno,cname,score)
+
+"""
+*****************************************************************
+以下为wps所写的学籍管理
+*****************************************************************
+"""
+def search_dno_from_department(dname):
+    '''
+    寻找系别名所对应的系别号
+    '''
+    execute_sql('''
+        select dno 
+        from department
+        where dname = ?
+    ''',dname)
+
+def add_student(sno,sname,sex,sage,dname,dormno):
+    '''
+    在student表中增添数据
+    '''
+    add_student_sql = '''
+        insert into 
+        student(sno,sname,sex,sage,dno,dormno) 
+        values(?,
+        ?,
+        ?,
+        ?,
+        (select dno from department where dname=?),
+        ?)
+        '''
+    return execute_sql(add_student_sql,sno,sname,sex,sage,dname,dormno)
+'''在management仍需要判断'''
+
+def update_student(sno,sname,sex,sage,dname,dormno):
+    update_student_sql = '''
+        update student 
+        set sname=?,
+        sex=?,
+        sage=?,
+        dno=(select dno from department where dname=?),
+        dormno=?
+        where sno=?
+    '''
+    return execute_sql(update_student_sql,sname,sex,sage,dname,dormno,sno)
+
+
+'''
+未考虑是否为级联删除，不知道能否成功删除
+'''
+def delete_student(sno):
+    delete_student_sql = '''
+        delete from 
+        student 
+        where sno = ?
+    '''
+    return execute_sql(delete_student_sql,sno)
+
+"""
+*****************************************************************
+以下为wps所写的课程管理
+*****************************************************************
+"""
+def search_from_course(cno='',cname=''):
+    search_from_course_in_course_management_sql = """
+        select cno,cname,teacher
+        from course
+        where 
+        cno like ? 
+        and cname like ?
+    """
+    cno = add_wild_card(cno)
+    cname = add_wild_card(cname)
+    table = search(search_from_course_in_course_management_sql,cno,cname)
+    pages = math.ceil(len(table) / PAGESIZE)
+    return table,pages
+
+def delete_course(cno):
+    delete_course_sql ='''
+        delete from
+        course
+        where cno = ?
+    '''
+    return execute_sql(delete_course_sql,cno)
+
+def update_course(cno,cname,teacher):
+    '''
+    默认只能修改课程名
+    '''
+    update_course_sql ='''
+        update course
+        set 
+            cname = ?,
+            teacher=?
+        where cno = ?
+    '''
+    return execute_sql(update_course_sql,cname,teacher,cno)
+
+def add_course(cno="",cname="",teacher=""):
+    add_course_sql = """
+        insert into
+        course(cno,cname,teacher)
+        values(?,?,?)
+    """
+    return execute_sql(add_course_sql,cno,cname,teacher)
+    
