@@ -193,7 +193,6 @@ def grade_management():
 def course_management():
     table,_ = search_from_course()
     data = request.get_json()
-    print(data)
     if request.method == "POST":
         cno,cname = data.get("cno",""),data.get("cname","")
         table,_=search_from_course(cno,cname)

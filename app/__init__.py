@@ -3,7 +3,6 @@ from config import Config
 import os
 import click
 from flask_wtf.csrf import CSRFProtect
-from flask_admin import Admin
 
 
 app= Flask(__name__)
