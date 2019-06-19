@@ -1,0 +1,274 @@
+<div class="form-row">
+    <div class="form-group col-md-2">
+            <input type="text" id="sno" class="form-control" placeholder="学号">
+</div>
+<div class="form-group col-md-2">
+    <input type="text" id="sname" class="form-control" placeholder="姓名">
+</div>
+<div class="form-group col-md-3">
+    <input type="text" id="cname" class="form-control" placeholder="课程名">
+</div>
+<div class="form-group col-md-2">
+    <button id="search_grade" class="btn btn-primary">搜索</button>
+</div>
+</div>
+<button class="btn btn-info btn-sm " data-toggle="modal" data-target="#addModal" >
+        <span class="glyphicon glyphicon-plus"></span>
+        录入成绩
+    </button>
+<table class="table table-hover" id="gradetable">
+<thead>
+<tr>
+    <th>学号</th>
+    <th>名字</th>
+    <th>课程名</th>
+    <th>分数</th>
+    <th>操作</th>
+</tr>
+</thead>
+<tbody>
+    {% if table %}
+    {% for row in table %}
+        <tr>
+        {% for td in row %}
+            <td>{{td or "" }}</td>
+        {% endfor %}
+        <td>
+                <div class="form-row" style="color: rgb(232, 127, 104);">
+                    <div class="form-group col-md-4" data-toggle="tooltip" data-placement="right" title="修改">
+                        <i class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#updateModal"></i>
+                    </div>
+                    <div class="form-group col-md-4" data-toggle="tooltip" data-placement="right" title="删除">
+                        <i title="删除" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#deleteModal"></i>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    {% endif %}
+</tbody>
+</table>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" >确定</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                确定删除该条成绩
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="deleteButton">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">更新</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" id="student_update_form" action="">
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="updateSno">学号</label>
+                            <input type="text" class="form-control" name="sno" id="updateSno" disabled="disabled">
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="updateSname">姓名</label>
+                            <input type="text" class="form-control" name="sname" id="updateSname" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="updateCname">课程名</label>
+                                <input type="text" class="form-control" name="sno" id="updateCname" disabled="disabled">
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="updateScore">分数</label>
+                                <input type="text" class="form-control" name="sname" id="updateScore">
+                            </div>
+                        </div>
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="updateButton">更新</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">成绩录入</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" id="student_add_form" action="">
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="addSno">学号</label>
+                            <input type="text" class="form-control" name="sno" id="addSno" >
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="addSname">姓名</label>
+                            <input type="text" class="form-control" name="sname" id="addSname" >
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="addCname">课程名</label>
+                                <input type="text" class="form-control" name="sno" id="addCname">
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="addScore">分数</label>
+                                <input type="text" class="form-control" name="sname" id="addScore">
+                            </div>
+                        </div>
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addButton">更新</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+var csrftoken = $('meta[name=csrf-token]').attr('content')
+var page = 0
+var pages = 1
+var sname = null
+var cno = null
+var cname = null
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+    }
+    }
+})
+var delteSno = null
+    $(document).ready(function () {
+
+        function showBoast(message,type){
+            bootoast({
+                        message: message,
+                        type: type,
+                        position: 'right-top',
+                        timeout: 5,
+                    })
+        }
+
+        $('.glyphicon-trash').bind("click",function (e) {
+            delteSno = $(this).parents().filter("tr").attr('id')
+        });
+
+        $('#deleteButton').bind("click", function () {
+            data = {
+                "sno": delteSno
+            }
+            $.ajax({
+                type: "DELETE",
+                url: manage_student_grade_url,
+                data: JSON.stringify(data),
+                contentType: "application/json;charset=uft-8",
+                success: function (response) {
+                    showBoast(response.message,response._type)
+                    window.trigger("hashchange")
+                    $(this).parents(".modal").modal("hide")
+                    $('.modal-backdrop').remove()
+                    $('body').removeClass("modal-open")
+                }
+            });
+        })
+
+        $('.glyphicon-pencil').bind("click",function (e) {
+            var children = $(this).parents().filter("tr").children()
+            var form = $('#student_update_form').find(".form-control")
+            for (var i = 0; i < children.length - 1; i++) {
+                $(form[i]).val($(children[i]).text())
+            }
+        });
+
+        $("#updateButton").bind("click",function () {
+            var form = $('#student_update_form').find(".form-control");
+            data = {}
+            $(form).each(function (element) {
+                data[$(this).attr("name")] = $(this).val()
+            });
+            if(data["sno"].length <= 0)
+            {
+                showBoast("学号不能为空","danger")
+                return
+            }
+
+            $.ajax({
+                type: "UPDATE",
+                url: manage_student_grade_url,
+                data: JSON.stringify(data),
+                contentType: "application/json;charset=uft-8",
+                success: function (response) {
+                    showBoast(response.message,response._type)
+                    window.trigger("hashchange")
+                    $(this).parents(".modal").modal("hide")
+                    $('.modal-backdrop').remove()
+                    $('body').removeClass("modal-open")
+                }
+            });
+        })
+
+        $("#addButton").bind("click",function () {
+            var form = $('#student_add_form').find(".form-control")
+            var data = {}
+            $(form).each(function (element) {
+                data[$(this).attr("name")] = $(this).val()
+            });
+            
+            if(data["sno"].length <= 0)
+            {
+                showBoast("学号不能为空","danger")
+                return
+            }    
+            $.ajax({
+                type: "PUT",
+                url: manage_student_grade_url,
+                data: JSON.stringify(data),
+                contentType: "application/json;charset=uft-8",
+                success: function (response) {
+                    showBoast(response.message,response._type)
+                    window.trigger("hashchange")
+                    $(this).parents(".modal").modal("hide")
+                    $('.modal-backdrop').remove()
+                    $('body').removeClass("modal-open")
+                }
+            });
+    })
+    });
+
+</script>

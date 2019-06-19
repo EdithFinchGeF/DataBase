@@ -1,0 +1,106 @@
+<div class="form-row">
+            <div class="form-group col-md-2">
+                    <input type="text" id="sno" class="form-control" placeholder="学号">
+        </div>
+        <div class="form-group col-md-2">
+            <input type="text" id="sname" class="form-control" placeholder="姓名">
+        </div>
+        <div class="form-group col-md-1.5">
+                <select class="form-control" id="sex">
+                    <option value="all">性别</option>
+                    <option value="male">男</option>
+                    <option value="female">女</option>
+                </select>
+            </div>
+        <div class="form-group col-md-2">
+            <input type="text" id="dname" class="form-control" placeholder="院系">
+        </div>
+        <div class="form-group col-md-2">
+                <input type="text" id="dormno" class="form-control" placeholder="宿舍号">
+            </div>
+        <div class="form-group col-md-2">
+            <button id="search_student" class="btn btn-primary">搜索</button>
+        </div>
+    </div>
+<table class="table table-striped" id="gradetable" >
+
+                <thead>
+                        <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                        <th>院系</th>
+                        <th>宿舍号</th>
+                        </tr>
+                    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div id="button_group" style="display: none">
+        <button id="lastpage" class="btn btn-info">上一页</button>
+        <button id="nextpage" class="btn btn-info">下一页</button>
+</div>
+
+<script>
+      var csrftoken = $('meta[name=csrf-token]').attr('content')
+        var page = 1
+        var pages = 1
+        var sname = null
+        var cno = null
+        var cname = null
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            }
+            }
+        })
+
+
+
+    function pageChange(){
+        var sname = $('#sname').val()
+        var sno = $('#sno').val()
+        var sex = $('#sex').val()
+        var dname = $('#dname').val()
+        var dormno = $('#dormno').val()
+        data = {
+            "sname":sname,
+            "sno":sno,
+            "sex":sex,
+            "dname":dname,
+            "dormno":dormno,
+            "page": page
+        }
+        $.ajax({
+            type: "POST",
+            url: search_student_info_url,
+            data: JSON.stringify(data),
+            contentType: "application/json;charset=uft-8",
+            success: function (response) {
+                $('tbody').html(response.html)
+                bootoast({
+                    message:response.message,
+                    type:response._type,
+                    position:'right-top',
+                    timeout:5,
+                })
+                pages = response.pages
+                show_page_button()
+            }
+        });
+    }
+
+    
+    $('#nextpage').bind('click',function(){
+        page = page + 1 
+        pageChange()
+    })
+
+    $('#lastpage').bind('click',function(){
+        page = page - 1 
+        pageChange()
+    })
+</script>

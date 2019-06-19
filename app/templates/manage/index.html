@@ -1,0 +1,32 @@
+{% from "macro.html" import is_teacher_or_student %}
+{% extends "base.html" %}
+{% block body%}
+        <div class="col-3">
+            
+                <ul class="list-group">
+                    <label class="list-group-item list-group-item-info"><span class="glyphicon glyphicon-search"></span>        查询</label>
+                    <a href="#intro" class="list-group-item list-group-item-action">学生资料查询</a>
+                    <a href="#grade_search" class="list-group-item list-group-item-action active">学生成绩查询</a>
+                    <label class="list-group-item list-group-item-info"><span class="glyphicon glyphicon-cog"></span>        管理</label>
+                    <a href="#manage_course" class="list-group-item list-group-item-action">课程管理</a>
+                    <a href="#manage_student" class="list-group-item list-group-item-action">学籍管理</a>
+                    <a href="#manage_student_grade" class="list-group-item list-group-item-action">成绩管理</a>
+                    <label class="list-group-item list-group-item-info"><span class="glyphicon glyphicon-user"></span>        个人信息</label>
+                    <a href="#change_passwd" class="list-group-item list-group-item-action">修改密码</a>
+                </ul>
+        </div>
+
+        <div class="col-7" id="main">
+        </div>
+        <script src="{{url_for('static',filename='js/script.js')}}" type="text/javascript" ></script>
+        <script src="{{url_for('static',filename='js/bootoast.js')}}"></script>
+        <script type="text/javascript" >
+            var change_passwd_url = "{{ url_for('auth.change_passwd') }}" ;
+            var search_grade_url = "{{ url_for('manage.search_grade')}}";
+            var search_student_info_url = "{{ url_for('manage.search_student')}}";
+            var manage_student_url = "{{ url_for('manage.roll_management')}}"
+            var manage_student_grade_url = "{{ url_for('manage.grade_management')}}"
+            var manage_course_url = "{{ url_for('manage.course_management')}}"
+        </script>
+        <script src="{{url_for('static',filename='js/manage.js')}}" type="text/javascript" ></script>
+{% endblock %}

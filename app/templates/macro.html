@@ -1,0 +1,19 @@
+{% macro render_flied(flied,show_label = False) %}
+    {% if show_label %}
+        {{ flied.label}}
+    {% endif %}
+
+    {{ flied(class="form-control",**kwargs) }}
+    {% for error in flied.errors %}
+        <small class = "error" style="color: red">{{error}}</small>
+    {% endfor %}
+{% endmacro %}
+
+{% macro render_welcome() %}
+    欢迎
+    {% if (session['id'] | length) == 4  %}
+    {{ session['username'][0]}}老师
+    {% else %}
+    {{ session['username']}}学生
+    {% endif %}
+{% endmacro %}

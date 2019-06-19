@@ -1,0 +1,10 @@
+{% if table %}
+{% for row in table %}
+<tr>
+    {% for i in row %}
+    <td>{{ i or '' }}</td>
+    {% endfor %}
+</tr>
+{% endfor %}
+{% endif %}
+
