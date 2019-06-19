@@ -1,7 +1,6 @@
 from flask import render_template,flash,redirect,request,session,url_for,jsonify,Blueprint
 from app.db import (search_from_grade,check_passwd,set_passwd,
-                    test,search_from_student,delete_grade,update_grade,search_from_course,add_grade,add_student,
-                    update_student,delete_student,add_course,delete_course,update_course)
+                    test,search_from_student,delete_grade,update_grade,search_from_course,add_grade)
 from app.unity import table_slice, required_login
 
 manage_bp = Blueprint('manage',__name__)
@@ -73,72 +72,9 @@ def search_student():
 def roll_management():
     data = request.get_json()
     table,_ = search_from_student()
-    if request.method == 'POST':
-        sno,sname,sex,dname,dormno = (data.get("sno",""),data.get("sname",""),
-                                           data.get("sex",""),data.get("dname",""),
-                                           data.get("dormno",""))
-        if sex == "male":
-            sex = "男"
-        elif sex =="female":
-            sex = "女"
-        else:
-            sex = ""
-        table,pages= search_from_student(sno,sname,sex,dname,dormno)
-        if not table:
-            message,_type = "查询结果不存在","warning"
-        else:
-            message,_type = "查询成功","success"
-        html = render_template("manage/_manage_table.html",table=table)
-        return jsonify(html=html,message=message,_type=_type,pages=pages)
-    elif request.method == 'PUT':
-        sno,sname,sex,age,dname,dormno=(
-            data.get("sno",""),data.get("sname",""),
-            data.get("sex",""),data.get("age",""),
-            data.get("dname",""),data.get("dormno","")
-        )
-        if sex == "male":
-            sex = "男"
-        elif sex == 'female':
-            sex = "女"
-        else :
-            sex = ""
-        if add_student(sno=sno,sname=sname,sex=sex,sage=age,dname=dname,dormno=dormno):
-            message,_type = "成功添加","success"
-        else :
-            message,_type = "添加失败","warning"
-        return jsonify(message = message,_type = _type)
-    elif request.method == 'UPDATE':
-        sno,sname,sex,age,dname,dormno = (
-                                    data.get("sno",""),data.get("sname",""),
-                                    data.get("sex",""),data.get("age",""),
-                                    data.get("dname",""),data.get("dormno","")
-                                    )
-        if sex == "male":
-            sex = "男"
-        elif sex =="female":
-            sex = "女"
-        else:
-            sex = ""
-
-        if update_student(sno = sno,sname = sname,sex = sex,sage = age,dname = dname,dormno = dormno):
-            message,_type = "修改成功","success"
-        else :
-            message,_type = "修改失败","warning"
-       
-        return jsonify(message = message,_type = _type) 
-    elif request.method == 'DELETE':
-        sno = data["sno"]
-        table,_ = search_from_student(sno=sno)
-        if not table:
-            message,_type = "删除失败","warning"
-        else:
-            delete_student(sno=sno)
-            message,_type = "删除成功","success"
-        return jsonify(message=message,_type=_type)
-        
+    if request.method == "PUT":
+        return jsonify(message="hello",_type="info")
     return render_template("manage/manage_student.html",table=table)
-
-
 
 
 @manage_bp.route("/manage_student_grade",methods=["POST","GET","DELETE","PUT","UPDATE"])
@@ -149,7 +85,7 @@ def grade_management():
     if request.method == "POST":
         table,_ = search_from_grade(sno=data["sno"],sname=data["sname"],cname=data["cname"])
         html = render_template('manage/_manage_table.html',table=table)
-        if html:
+        if len(html):
             message,_type = "查询成功","success"
         else:
             message,_type = "查询结果失败","warning"
@@ -168,7 +104,7 @@ def grade_management():
     if request.method == "UPDATE":
         sno,cname,score = data.get("sno",""),data.get("cname",""),data.get("score","")
         table,_ = search_from_grade(sno=sno,cname=cname)
-        if not table or not update_grade(sno=sno,cname=cname,score=score):
+        if not table and update_grade(sno=sno,cname=cname,score=score):
             message,_type = "更新失败","warning"
         else:
             message,_type = "更新成功","success"
@@ -191,42 +127,9 @@ def grade_management():
 @manage_bp.route("/manage_course",methods=["POST","GET","DELETE","PUT","UPDATE"])
 @required_login
 def course_management():
-    table,_ = search_from_course()
-    data = request.get_json()
-    print(data)
+    table = [["1","高数","张三"],
+            ["2","数据库","李四"]]
     if request.method == "POST":
-        cno,cname = data.get("cno",""),data.get("cname","")
-        table,_=search_from_course(cno,cname)
-        html = render_template("manage/_manage_table.html",table=table)
-        if len(html):
-            message,_type = "查询成功","success"
-        else:
-            message,_type = "查询失败","warning"
-        return jsonify(html=html,message=message,_type=_type)
-
-    if request.method == "PUT":
-        cno,cname,teacher = data.get("cno",""),data.get("cname",""),data.get("teacher","")
-        if add_course(cno,cname,teacher):
-            message,_type = "添加成功","success"
-        else :
-            message,_type = "添加失败","warning"
-        return jsonify(message=message,_type=_type)
-
-    if request.method == "UPDATE":
-        cno,cname,teacher = data.get("cno",""), data.get("cname",""), data.get("teacher","")
-        if update_course(cno,cname,teacher):
-            message,_type = "更新成功","success"
-        else :
-            message,_type = "更新失败","warning"
-        return jsonify(message=message,_type=_type)
-    
-    if request.method == "DELETE":
-        cno = data.get("cno")
-        if delete_course(cno):
-            message,_type = "删除成功","success"
-        else :
-            message,_type = "删除失败","warning"
-        return jsonify(message=message,_type=_type)
-
+        return jsonify(message="hello world",_type="warning")
     return render_template("manage/manage_course.html",table=table)
 

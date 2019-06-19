@@ -9,7 +9,7 @@ def init_db():
     from .db import get_db
     with app.app_context():
         db = get_db()
-        with open(os.path.join(app.root_path,"schema.sql"),encoding="utf-8") as f:
+        with open(os.path.join(app.root_path,"static/sql/schema.sql"),encoding="utf-8") as f:
             db.executescript(f.read())
         db.commit()
     click.echo("init successfully")

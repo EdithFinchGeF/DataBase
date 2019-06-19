@@ -18,7 +18,7 @@ def change_passwd():
             return jsonify(message = '密码修改成功',_type='success')
         else:
             return jsonify(message = '密码不正确',_type='warning')
-    return render_template('auth/change_passwd.html')
+    return render_template('change_passwd.html')
 
 
 @auth_bp.route("/login",methods = ["GET","POST"]) 

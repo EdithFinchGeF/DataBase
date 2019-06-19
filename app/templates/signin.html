@@ -14,7 +14,7 @@
   <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/sign-in/">
 
   <!-- Bootstrap core CSS -->
-  <link href="{{ url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet">
 
 
   <style>
@@ -49,11 +49,9 @@
     <small class="error" style="color: red">{{message}}</small>
     {% endfor %}
     <div class="checkbox mb-3">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox"  id="togglePasswd" class="custom-control-input">
-        <label for="togglePasswd" class="custom-control-label">显示密码</label>
-  
-      </div>
+      <label>
+        <input type="checkbox" value="显示密码" id="togglePasswd"> 显示密码
+      </label>
     </div>
     <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录"> 
     <p class="mt-5 mb-3 text-muted">&copy; 2019-2020</p>
